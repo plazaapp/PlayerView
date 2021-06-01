@@ -14,11 +14,11 @@ private extension Selector {
 }
 
 public extension PVTimeRange{
-    static let zero = kCMTimeRangeZero
+    static let zero = CMTimeRange.zero
 }
 
-public typealias PVStatus = AVPlayerStatus
-public typealias PVItemStatus = AVPlayerItemStatus
+public typealias PVStatus = AVPlayer.Status
+public typealias PVItemStatus = AVPlayerItem.Status
 public typealias PVTimeRange = CMTimeRange
 public typealias PVPlayer = AVQueuePlayer
 public typealias PVPlayerItem = AVPlayerItem
@@ -91,7 +91,7 @@ public enum PlayerViewFillMode {
 }
 
 private extension CMTime {
-    static var zero:CMTime { return kCMTimeZero }
+    static var zero:CMTime { return CMTime.zero }
 }
 /// A simple `UIView` subclass that is backed by an `AVPlayerLayer` layer.
 public class PlayerView: UIView {
@@ -149,11 +149,11 @@ public class PlayerView: UIView {
             guard let timescale = player?.currentItem?.duration.timescale else {
                 return
             }
-            let newTime = CMTimeMakeWithSeconds(newValue, timescale)
+            let newTime = CMTimeMakeWithSeconds(newValue, preferredTimescale: timescale)
             player!.seek(to: newTime,toleranceBefore: CMTime.zero,toleranceAfter: CMTime.zero)
         }
     }
-    public var interval = CMTimeMake(1, 60) {
+    public var interval = CMTimeMake(value: 1, timescale: 60) {
         didSet {
             if rate != 0 {
                 addCurrentTimeObserver()
@@ -306,7 +306,7 @@ public class PlayerView: UIView {
         let timeToPicture: CMTime
         if let time = time {
             
-            timeToPicture = CMTimeMakeWithSeconds(time, timescale)
+            timeToPicture = CMTimeMakeWithSeconds(time, preferredTimescale: timescale)
         } else if let time = player?.currentItem?.currentTime() {
             timeToPicture = time
         } else {
