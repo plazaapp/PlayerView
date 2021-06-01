@@ -120,6 +120,8 @@ public class PlayerView: UIView {
     
     public var loopVideosQueue = false
     
+    public var loopVideo = false
+
     public var player: PVPlayer? {
         get {
             return playerLayer.player as? PVPlayer
@@ -243,7 +245,10 @@ public class PlayerView: UIView {
             let urlsQueue = urlsQueue {
             
             self.addVideosOnQueue(urls: urlsQueue, afterItem: item)
+        } else if loopVideo {
+            player?.play()
         }
+        
         self.delegate?.playerVideo(playerFinished: self)
     }
     // MARK: public Functions
